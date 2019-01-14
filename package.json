@@ -1,0 +1,32 @@
+{
+  "name": "stlviewer",
+  "version": "1.0.0",
+  "author": "Christian Leicht",
+  "license": "ISC",
+  "scripts": {
+    "build": "webpack --mode=production"
+  },
+  "dependencies": {
+    "@types/jquery": "^3.3.29",
+    "jquery": "^3.3.1",
+    "three": "^0.100.0",
+    "three-orbitcontrols": "^2.99.1",
+    "three-stl-loader": "^1.0.6",
+    "webpack": "^4.28.4"
+  },
+  "main": "./src/index.ts",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ChristianLJ/STLViewer.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ChristianLJ/STLViewer/issues"
+  },
+  "homepage": "https://github.com/ChristianLJ/STLViewer#readme",
+  "devDependencies": {
+    "@types/node": "^10.12.18",
+    "ts-loader": "^5.3.3",
+    "typescript": "^3.2.2"
+  },
+  "description": ""
+}
