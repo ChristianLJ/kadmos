@@ -3,8 +3,9 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const THREE = require('three');
 const STLLoader = require('three-stl-loader')(THREE);
 const OrbitControls = require('three-orbitcontrols');
-class STLViewer {
-    constructor() {
+class Kadmos {
+    constructor(selector) {
+        this.selector = selector;
         this.addPopupTemplateHtmlToDom();
         this.handleEvents();
     }
@@ -84,7 +85,7 @@ class STLViewer {
         const backdrop = $("#stlBackdrop");
         const model = $("#stlModel");
         const closeBtn = $("#stlClose");
-        const viewStlFileBtn = $(".viewStlFile");
+        const viewStlFileBtn = $(this.selector);
         const parent = this;
         viewStlFileBtn.on("click", function () {
             model.html("");
@@ -114,5 +115,5 @@ class STLViewer {
         });
     }
 }
-exports.default = STLViewer;
+exports.default = Kadmos;
 //# sourceMappingURL=index.js.map
