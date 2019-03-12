@@ -2,12 +2,14 @@ const THREE: any = require('three');
 const STLLoader: any = require('three-stl-loader')(THREE);
 const OrbitControls: any = require('three-orbitcontrols');
 
-export default class STLViewer {
+export default class Kadmos {
   private camera: any;
   private scene: any;
   private renderer: any;
+  private selector: string;
 
-  constructor() {
+  constructor(selector:string) {
+	this.selector = selector;
     this.addPopupTemplateHtmlToDom();
     this.handleEvents();
   }
@@ -108,7 +110,7 @@ export default class STLViewer {
     const backdrop: any = $("#stlBackdrop");
     const model: any = $("#stlModel");
     const closeBtn: any = $("#stlClose");
-    const viewStlFileBtn: any = $(".viewStlFile");
+    const viewStlFileBtn: any = $(this.selector);
     const parent: any = this;
 
     viewStlFileBtn.on("click", function () {
