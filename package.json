@@ -1,18 +1,15 @@
 {
   "name": "kadmos",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
-		"build": "tsc --build tsconfig.json"
+    "build": "tsc --build tsconfig.json"
   },
   "dependencies": {
-    "@types/jquery": "^3.3.29",
-    "jquery": "^3.3.1",
     "three": "^0.100.0",
     "three-orbitcontrols": "^2.99.1",
-    "three-stl-loader": "^1.0.6",
-    "webpack": "^4.28.4"
+    "three-stl-loader": "^1.0.6"
   },
   "main": "./src/index.ts",
   "repository": {
@@ -26,7 +23,10 @@
   "devDependencies": {
     "@types/node": "^10.12.18",
     "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3333"
+    "typescript": "^3.3.3333",
+    "webpack": "^4.28.4",
+    "@types/jquery": "^3.3.29",
+    "jquery": "^3.3.1"
   },
   "description": ""
 }

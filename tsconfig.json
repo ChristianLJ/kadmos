@@ -6,6 +6,7 @@
     "typeRoots": ["./node_modules/@types"],
     "allowSyntheticDefaultImports": true,
     "outDir": "./dist",
-    "sourceMap": true
+    "sourceMap": true,
+	"declaration": true
   }
 }
