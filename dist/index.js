@@ -4,12 +4,14 @@ const THREE = require('three');
 const STLLoader = require('three-stl-loader')(THREE);
 const OrbitControls = require('three-orbitcontrols');
 class Kadmos {
-    constructor(selector) {
+    constructor() {
+    }
+    static initAll(selector) {
         this.selector = selector;
         this.addPopupTemplateHtmlToDom();
         this.handleEvents();
     }
-    addPopupTemplateHtmlToDom() {
+    static addPopupTemplateHtmlToDom() {
         document.body.innerHTML +=
             '<div id="stlBackdrop">' +
                 '  <div id="stlContent">' +
@@ -21,7 +23,7 @@ class Kadmos {
                 '  </div>' +
                 '</div>';
     }
-    init(filePath, color, width, height) {
+    static handleModel(filePath, color, width, height) {
         this.initScene();
         this.initCamera(width, height);
         this.scene.add(this.camera);
@@ -44,7 +46,7 @@ class Kadmos {
         this.initControls();
         window.addEventListener('resize', this.onWindowResize, false);
     }
-    getMesh(geometry, material) {
+    static getMesh(geometry, material) {
         const mesh = new THREE.Mesh(geometry, material);
         mesh.position.set(0, 0, 0);
         mesh.rotation.set(0, 0, 0);
@@ -53,18 +55,18 @@ class Kadmos {
         mesh.receiveShadow = true;
         return mesh;
     }
-    initCamera(width, height) {
+    static initCamera(width, height) {
         this.camera = new THREE.PerspectiveCamera(35, width / height, 1, 500);
         // Z is up for objects intended to be 3D printed.
         this.camera.up.set(0, 0, 1);
         this.camera.position.set(0, -9, 6);
         this.camera.add(new THREE.PointLight(0xffffff, 0.8));
     }
-    initScene() {
+    static initScene() {
         this.scene = new THREE.Scene();
         this.scene.add(new THREE.AmbientLight(0x999999));
     }
-    initControls() {
+    static initControls() {
         const controls = new OrbitControls(this.camera, this.renderer.domElement);
         controls.addEventListener('change', () => {
             this.render();
@@ -72,16 +74,16 @@ class Kadmos {
         controls.target.set(0, 0, 0);
         controls.update();
     }
-    onWindowResize() {
+    static onWindowResize() {
         this.camera.aspect = window.innerWidth / window.innerHeight;
         this.camera.updateProjectionMatrix();
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.render();
     }
-    render() {
+    static render() {
         this.renderer.render(this.scene, this.camera);
     }
-    handleEvents() {
+    static handleEvents() {
         const backdrop = $("#stlBackdrop");
         const model = $("#stlModel");
         const closeBtn = $("#stlClose");
@@ -91,7 +93,7 @@ class Kadmos {
             model.html("");
             const filePath = $(this).data("file");
             const color = $(this).data("color");
-            parent.init(filePath, Number(color), 800, 600);
+            parent.handleModel(filePath, Number(color), 800, 600);
             backdrop.fadeIn();
         });
         $(document).on('keyup', function (e) {
