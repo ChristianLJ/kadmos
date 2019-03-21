@@ -2,6 +2,8 @@ const THREE: any = require('three');
 const STLLoader: any = require('three-stl-loader')(THREE);
 const OrbitControls: any = require('three-orbitcontrols');
 
+import * as $ from "jquery";
+
 export default class Kadmos {
     private static camera: any;
     private static scene: any;
@@ -19,7 +21,7 @@ export default class Kadmos {
     }
 
     private static addPopupTemplateHtmlToDom(): void {
-        document.body.innerHTML +=
+        const backdrop: string =
             '<div id="stlBackdrop">' +
             '  <div id="stlContent">' +
             '    <div id="stlClose">' +
@@ -29,6 +31,8 @@ export default class Kadmos {
             '    </div>' +
             '  </div>' +
             '</div>';
+
+        $(backdrop).appendTo("body");
     }
 
     public static handleModel(filePath: string, color: number, width: number, height: number): void {
