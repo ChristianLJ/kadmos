@@ -3,6 +3,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const THREE = require('three');
 const STLLoader = require('three-stl-loader')(THREE);
 const OrbitControls = require('three-orbitcontrols');
+const $ = require("jquery");
 class Kadmos {
     constructor() {
     }
@@ -12,16 +13,16 @@ class Kadmos {
         this.handleEvents();
     }
     static addPopupTemplateHtmlToDom() {
-        document.body.innerHTML +=
-            '<div id="stlBackdrop">' +
-                '  <div id="stlContent">' +
-                '    <div id="stlClose">' +
-                '      <i class="fas fa-times"></i>' +
-                '    </div>' +
-                '    <div id="stlModel">' +
-                '    </div>' +
-                '  </div>' +
-                '</div>';
+        const backdrop = '<div id="stlBackdrop">' +
+            '  <div id="stlContent">' +
+            '    <div id="stlClose">' +
+            '      <i class="fas fa-times"></i>' +
+            '    </div>' +
+            '    <div id="stlModel">' +
+            '    </div>' +
+            '  </div>' +
+            '</div>';
+        $(backdrop).appendTo("body");
     }
     static handleModel(filePath, color, width, height) {
         this.initScene();
