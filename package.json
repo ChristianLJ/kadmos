@@ -1,6 +1,6 @@
 {
   "name": "kadmos",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
@@ -22,8 +22,6 @@
   },
   "homepage": "https://github.com/ChristianLJ/STLViewer#readme",
   "devDependencies": {
-    "@types/node": "^12.0.2",
-    "ts-loader": "^6.0.1",
     "typescript": "^3.4.5"
   },
   "description": ""
