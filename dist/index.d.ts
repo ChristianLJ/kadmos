@@ -13,5 +13,6 @@ export default class Kadmos {
     private static initControls;
     private static onWindowResize;
     private static render;
+    private static hideBackdrop;
     private static handleEvents;
 }

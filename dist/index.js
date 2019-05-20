@@ -3,7 +3,6 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const THREE = require('three');
 const STLLoader = require('three-stl-loader')(THREE);
 const OrbitControls = require('three-orbitcontrols');
-const $ = require("jquery");
 class Kadmos {
     constructor() {
     }
@@ -22,7 +21,8 @@ class Kadmos {
             '    </div>' +
             '  </div>' +
             '</div>';
-        $(backdrop).appendTo("body");
+        const backdropNode = document.createRange().createContextualFragment(backdrop);
+        document.getElementsByTagName("body")[0].appendChild(backdropNode);
     }
     static handleModel(filePath, color, width, height) {
         this.initScene();
@@ -84,37 +84,39 @@ class Kadmos {
     static render() {
         this.renderer.render(this.scene, this.camera);
     }
+    static hideBackdrop() {
+        const backdrop = document.getElementById("stlBackdrop");
+        const model = document.getElementById("stlModel");
+        backdrop.classList.remove("backdrop--fade-out");
+        setTimeout(() => {
+            model.innerHTML = "";
+        }, 250);
+    }
     static handleEvents() {
-        const backdrop = $("#stlBackdrop");
-        const model = $("#stlModel");
-        const closeBtn = $("#stlClose");
-        const viewStlFileBtn = $(this.selector);
+        const backdrop = document.getElementById("stlBackdrop");
+        const model = document.getElementById("stlModel");
+        const closeBtn = document.getElementById("stlClose");
+        const viewStlFileBtn = document.getElementsByClassName(this.selector)[0];
         const parent = this;
-        viewStlFileBtn.on("click", function () {
-            model.html("");
-            const filePath = $(this).data("file");
-            const color = $(this).data("color");
+        viewStlFileBtn.addEventListener("click", (event) => {
+            model.innerHTML = "";
+            const filePath = event.target.dataset.file;
+            const color = event.target.dataset.color;
             parent.handleModel(filePath, Number(color), 800, 600);
-            backdrop.fadeIn();
+            backdrop.classList.add("backdrop--fade-in");
         });
-        $(document).on('keyup', function (e) {
-            if (e.keyCode === 27) { // escape key maps to keycode `27`
-                backdrop.fadeOut(function () {
-                    model.html("");
-                });
+        document.addEventListener("keyup", (event) => {
+            if (event.keyCode === 27) { // escape key maps to keycode `27`
+                this.hideBackdrop();
             }
         });
-        closeBtn.on("click", function (e) {
-            backdrop.fadeOut(function () {
-                model.html("");
-            });
+        closeBtn.addEventListener("click", () => {
+            this.hideBackdrop();
         });
-        backdrop.on("click", function (e) {
-            if (e.target !== this)
+        backdrop.addEventListener("click", (event) => {
+            if (event.target !== this)
                 return;
-            $(this).fadeOut(function () {
-                model.html("");
-            });
+            this.hideBackdrop();
         });
     }
 }

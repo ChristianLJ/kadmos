@@ -1,6 +1,6 @@
 {
   "name": "kadmos",
-  "version": "1.0.10",
+  "version": "1.0.11",
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
@@ -8,7 +8,7 @@
     "deploy": "npm run build && npm publish"
   },
   "dependencies": {
-    "three": "^0.100.0",
+    "three": "^0.104.0",
     "three-orbitcontrols": "^2.99.1",
     "three-stl-loader": "^1.0.6"
   },
@@ -22,12 +22,9 @@
   },
   "homepage": "https://github.com/ChristianLJ/STLViewer#readme",
   "devDependencies": {
-    "@types/node": "^10.12.18",
-    "ts-loader": "^5.3.3",
-    "typescript": "^3.3.3333",
-    "webpack": "^4.28.4",
-    "@types/jquery": "^3.3.29",
-    "jquery": "^3.3.1"
+    "@types/node": "^12.0.2",
+    "ts-loader": "^6.0.1",
+    "typescript": "^3.4.5"
   },
   "description": ""
 }

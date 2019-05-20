@@ -2,8 +2,6 @@ const THREE: any = require('three');
 const STLLoader: any = require('three-stl-loader')(THREE);
 const OrbitControls: any = require('three-orbitcontrols');
 
-import * as $ from "jquery";
-
 export default class Kadmos {
     private static camera: any;
     private static scene: any;
@@ -32,7 +30,8 @@ export default class Kadmos {
             '  </div>' +
             '</div>';
 
-        $(backdrop).appendTo("body");
+        const backdropNode: Node = document.createRange().createContextualFragment(backdrop);
+        document.getElementsByTagName("body")[0].appendChild(backdropNode);
     }
 
     public static handleModel(filePath: string, color: number, width: number, height: number): void {
@@ -114,43 +113,48 @@ export default class Kadmos {
         this.renderer.render(this.scene, this.camera);
     }
 
+    private static hideBackdrop():void{
+        const backdrop: any = document.getElementById("stlBackdrop");
+        const model: any = document.getElementById("stlModel");
+
+        backdrop.classList.remove("backdrop--fade-out");
+        setTimeout(() => {
+            model.innerHTML = "";
+        }, 250);
+    }
+
     private static handleEvents(): void {
-        const backdrop: any = $("#stlBackdrop");
-        const model: any = $("#stlModel");
-        const closeBtn: any = $("#stlClose");
-        const viewStlFileBtn: any = $(this.selector);
+        const backdrop: any = document.getElementById("stlBackdrop");
+        const model: any = document.getElementById("stlModel");
+        const closeBtn: any = document.getElementById("stlClose");
+        const viewStlFileBtn: any = document.getElementsByClassName(this.selector)[0];
         const parent: any = this;
 
-        viewStlFileBtn.on("click", function () {
-            model.html("");
-            const filePath: string = $(this).data("file");
-            const color: string = $(this).data("color");
+        viewStlFileBtn.addEventListener("click", (event) => {
+            model.innerHTML = "";
+            const filePath: string = event.target.dataset.file;
+            const color: string = event.target.dataset.color;
 
             parent.handleModel(filePath, Number(color), 800, 600);
-            backdrop.fadeIn();
+
+            backdrop.classList.add("backdrop--fade-in");
         });
 
-        $(document).on('keyup', function (e) {
-            if (e.keyCode === 27) { // escape key maps to keycode `27`
-                backdrop.fadeOut(function () {
-                    model.html("");
-                });
+        document.addEventListener("keyup", (event) => {
+            if (event.keyCode === 27) { // escape key maps to keycode `27`
+                this.hideBackdrop();
             }
         });
 
-        closeBtn.on("click", function (e: any) {
-            backdrop.fadeOut(function () {
-                model.html("");
-            });
+        closeBtn.addEventListener("click", () => {
+            this.hideBackdrop();
         });
 
-        backdrop.on("click", function (e: any) {
-            if (e.target !== this)
+        backdrop.addEventListener("click", (event) => {
+            if (event.target !== this)
                 return;
 
-            $(this).fadeOut(function () {
-                model.html("");
-            });
+          this.hideBackdrop();
         });
     }
 }
