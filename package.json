@@ -1,6 +1,6 @@
 {
   "name": "kadmos",
-  "version": "1.0.16",
+  "version": "1.0.17",
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
@@ -20,7 +20,8 @@
     "/package-lock.json",
     "/README.md"
   ],
-  "main": "./src/index.ts",
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/ChristianLJ/STLViewer.git"
