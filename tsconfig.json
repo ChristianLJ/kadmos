@@ -1,12 +1,30 @@
 {
   "compilerOptions": {
-    "target": "es2017",
-    "moduleResolution": "node",
-    "module": "commonjs",
-    "typeRoots": ["./node_modules/@types"],
-    "allowSyntheticDefaultImports": true,
-    "outDir": "./dist",
+    "target": "es2015",
+    "module": "es2015",
+    "lib": [
+      "es2015", "dom"
+    ],
+    "declaration": true,
     "sourceMap": true,
-	"declaration": true
-  }
+    "outDir": "dist",
+    "removeComments": true,
+    "strict": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "forceConsistentCasingInFileNames": true,
+    "suppressImplicitAnyIndexErrors": true,
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": [
+    "src/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    "examples"
+  ]
 }
