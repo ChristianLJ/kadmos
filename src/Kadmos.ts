@@ -1,6 +1,7 @@
-const THREE: any = require('three');
-const STLLoader: any = require('three-stl-loader')(THREE);
-const OrbitControls: any = require('three-orbitcontrols');
+import * as THREE from 'three';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls.js';
+import {STLLoader} from 'three/examples/jsm/loaders/STLLoader.js';
+
 
 export class Kadmos {
     private static camera: any;
