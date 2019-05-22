@@ -1,7 +1,7 @@
 const THREE = require('three');
 const STLLoader = require('three-stl-loader')(THREE);
 const OrbitControls = require('three-orbitcontrols');
-export default class Kadmos {
+export class Kadmos {
     constructor() {
     }
     static initAll(selector) {

@@ -1,4 +1,4 @@
-export default class Kadmos {
+export declare class Kadmos {
     private static camera;
     private static scene;
     private static renderer;

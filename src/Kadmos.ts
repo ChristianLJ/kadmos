@@ -2,7 +2,7 @@ const THREE: any = require('three');
 const STLLoader: any = require('three-stl-loader')(THREE);
 const OrbitControls: any = require('three-orbitcontrols');
 
-export default class Kadmos {
+export class Kadmos {
     private static camera: any;
     private static scene: any;
     private static renderer: any;
