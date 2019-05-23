@@ -1,6 +1,6 @@
 {
   "name": "kadmos",
-  "version": "1.0.17",
+  "version": "1.0.25",
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
@@ -8,9 +8,7 @@
     "deploy": "npm run build && npm publish"
   },
   "dependencies": {
-    "three": "^0.104.0",
-    "three-orbitcontrols": "^2.99.1",
-    "three-stl-loader": "^1.0.6"
+    "three-full": "^17.1.0"
   },
   "files": [
     "/src",

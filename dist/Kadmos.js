@@ -1,6 +1,14 @@
-import * as THREE from 'three';
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
-import { STLLoader } from 'three/examples/jsm/loaders/STLLoader.js';
+import { GridHelper } from "three-full/sources/helpers/GridHelper";
+import { Vector3 } from "three-full/sources/math/Vector3";
+import { WebGLRenderer } from "three-full/sources/renderers/WebGLRenderer";
+import { MeshPhongMaterial } from "three-full/sources/materials/MeshPhongMaterial";
+import { Mesh } from "three-full/sources/objects/Mesh";
+import { PointLight } from "three-full/sources/lights/PointLight";
+import { Scene } from "three-full/sources/scenes/Scene";
+import { PerspectiveCamera } from "three-full/sources/cameras/PerspectiveCamera";
+import { AmbientLight } from "three-full/sources/lights/AmbientLight";
+import { STLLoader } from "./loaders/STLLoader";
+import { OrbitControls } from "./loaders/OrbitControls";
 export class Kadmos {
     constructor() {
     }
@@ -26,10 +34,10 @@ export class Kadmos {
         this.initScene();
         this.initCamera(width, height);
         this.scene.add(this.camera);
-        const grid = new THREE.GridHelper(10, 50, 0x96CBDE, 0xA6DBEF);
-        grid.rotateOnAxis(new THREE.Vector3(1, 0, 0), 90 * (Math.PI / 180));
+        const grid = new GridHelper(10, 50, 0x96CBDE, 0xA6DBEF);
+        grid.rotateOnAxis(new Vector3(1, 0, 0), 90 * (Math.PI / 180));
         this.scene.add(grid);
-        this.renderer = new THREE.WebGLRenderer({ antialias: true });
+        this.renderer = new WebGLRenderer({ antialias: true });
         this.renderer.setClearColor(0xFAFAFA);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(width, height);
@@ -38,7 +46,7 @@ export class Kadmos {
             stlModelElement.appendChild(this.renderer.domElement);
         }
         const loader = new STLLoader();
-        const material = new THREE.MeshPhongMaterial({ color: color, specular: 0x0, shininess: 50 });
+        const material = new MeshPhongMaterial({ color: color, specular: 0x0, shininess: 50 });
         const parent = this;
         loader.load(filePath, function (geometry) {
             parent.scene.add(parent.getMesh(geometry, material));
@@ -48,7 +56,7 @@ export class Kadmos {
         window.addEventListener('resize', this.onWindowResize, false);
     }
     static getMesh(geometry, material) {
-        const mesh = new THREE.Mesh(geometry, material);
+        const mesh = new Mesh(geometry, material);
         mesh.position.set(0, 0, 0);
         mesh.rotation.set(0, 0, 0);
         mesh.scale.set(.1, .1, .1);
@@ -57,14 +65,14 @@ export class Kadmos {
         return mesh;
     }
     static initCamera(width, height) {
-        this.camera = new THREE.PerspectiveCamera(35, width / height, 1, 500);
+        this.camera = new PerspectiveCamera(35, width / height, 1, 500);
         this.camera.up.set(0, 0, 1);
         this.camera.position.set(0, -9, 6);
-        this.camera.add(new THREE.PointLight(0xffffff, 0.8));
+        this.camera.add(new PointLight(0xffffff, 0.8));
     }
     static initScene() {
-        this.scene = new THREE.Scene();
-        this.scene.add(new THREE.AmbientLight(0x999999));
+        this.scene = new Scene();
+        this.scene.add(new AmbientLight(0x999999));
     }
     static initControls() {
         const controls = new OrbitControls(this.camera, this.renderer.domElement);
