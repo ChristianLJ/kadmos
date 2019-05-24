@@ -1,6 +1,6 @@
 import {Kadmos} from "../src";
 
-export class Index {
+export class App {
     constructor() {
         this.startKadmos();
     }
@@ -11,4 +11,4 @@ export class Index {
     }
 }
 
-new Index();
+new App();

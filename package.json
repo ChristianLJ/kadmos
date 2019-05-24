@@ -4,7 +4,8 @@
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
-    "build:production": "tsc --build tsconfig.json",
+    "build:production:dist": "tsc --build tsconfig.json",
+    "build:production:examples": "parcel build ./examples/index.html --out-dir ./examples/dist",
     "run:development": "parcel ./examples/index.html --out-dir ./examples/dist",
     "deploy": "npm run build:production && npm publish"
   },
@@ -31,6 +32,7 @@
   },
   "devDependencies": {
     "parcel": "^1.12.3",
+    "parcel-plugin-clean-dist": "0.0.6",
     "sass": "^1.20.1",
     "typescript": "^3.4.5"
   },
