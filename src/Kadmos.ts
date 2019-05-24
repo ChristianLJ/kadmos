@@ -9,6 +9,8 @@ import {PerspectiveCamera} from "three-full/sources/cameras/PerspectiveCamera";
 import {AmbientLight} from "three-full/sources/lights/AmbientLight";
 import {STLLoader} from "./loaders/STLLoader";
 import {OrbitControls} from "./loaders/OrbitControls";
+import './assets/styles.scss';
+import {Geometry} from "three-full/sources/core/Geometry";
 
 export class Kadmos {
     private static camera: any;
@@ -18,6 +20,82 @@ export class Kadmos {
 
     constructor() {
 
+    }
+
+    private static getSpinner(): Element {
+        const element: Element | null = document.querySelector("#kadmos-spinner");
+        if (element) {
+            return element;
+        } else {
+            throw Error("Kadmos Spinner not defined");
+        }
+    }
+
+    private static getErrorWrapper(): Element {
+        const element: Element | null = document.querySelector("#kadmos-error-wrapper");
+        if (element) {
+            return element;
+        } else {
+            throw Error("Kadmos Error Wrapper not defined");
+        }
+    }
+
+    private static getError(): Element {
+        const element: Element | null = document.querySelector("#kadmos-error");
+        if (element) {
+            return element;
+        } else {
+            throw Error("Kadmos Error Container not defined");
+        }
+    }
+
+    private static getContentWrapper(): Element {
+        const element: Element | null = document.querySelector("#kadmos-content");
+        if (element) {
+            return element;
+        } else {
+            throw Error("Kadmos Error Container not defined");
+        }
+    }
+
+    private static getStlWrapper(): Element {
+        const element: Element | null = document.querySelector("#stlBackdrop");
+        if (element) {
+            return element;
+        } else {
+            throw Error("Kadmos STL Wrapper not defined");
+        }
+    }
+
+    public static initFromUrl(): void {
+        this.addPopupTemplateHtmlToDom();
+
+        const backdrop: any = document.getElementById("stlBackdrop");
+        const model: any = document.getElementById("stlModel");
+
+        document.addEventListener("DOMContentLoaded", () => {
+            model.innerHTML = "";
+
+            const urlParams = new URLSearchParams(window.location.search);
+
+            const fileUrl: string | null = urlParams.get('fileUrl');
+            const color: string | null = urlParams.get('color');
+            if (!fileUrl || !color) {
+                this.getSpinner().classList.add("kadmos-spinner--hidden");
+                this.getErrorWrapper().classList.add("kadmos-error-wrapper--visible");
+                this.getError().innerHTML = "<p>Please specify both fileUrl and color in HEX format.</p>";
+
+                return;
+            }
+
+            this.handleModel(fileUrl, color, window.innerWidth, window.innerHeight);
+            window.addEventListener("resize", () => {
+                if (this.renderer) {
+                    this.renderer.setSize(window.innerWidth, window.innerHeight);
+                }
+            });
+            backdrop.classList.add("backdrop--fade-in");
+        });
     }
 
     public static initAll(selector: string): void {
@@ -39,10 +117,23 @@ export class Kadmos {
             '</div>';
 
         const backdropNode: Node = document.createRange().createContextualFragment(backdrop);
-        document.getElementsByTagName("body")[0].appendChild(backdropNode);
+        this.getContentWrapper().appendChild(backdropNode);
     }
 
-    public static handleModel(filePath: string, color: number, width: number, height: number): void {
+    private static handleCenter(geometry: Geometry): void {
+        geometry.computeBoundingBox();
+
+        geometry.center();
+
+        const boundingBox: any = geometry.boundingBox;
+        const max = boundingBox.max.z;
+        const min = boundingBox.min.z;
+        const height = max - min;
+
+        geometry.translate(0, 0, height / 2);
+    }
+
+    public static handleModel(filePath: string, color: string, width: number, height: number): void {
         this.initScene();
         this.initCamera(width, height);
 
@@ -65,19 +156,18 @@ export class Kadmos {
         const loader: any = new STLLoader();
 
         // Binary files
-        const material: any = new MeshPhongMaterial({color: color, specular: 0x0, shininess: 50});
-        const parent: any = this;
-        loader.load(filePath, function (geometry: any) {
-            parent.scene.add(parent.getMesh(geometry, material));
-            parent.render();
+        const material: any = new MeshPhongMaterial({color: Number(color), specular: 0x0, shininess: 50});
+        loader.load(filePath, (geometry: any) => {
+            this.handleCenter(geometry);
+            this.scene.add(this.getMesh(geometry, material));
+            this.render();
         });
 
         this.initControls();
-        window.addEventListener('resize', this.onWindowResize, false);
     }
 
     // @ts-ignore
-    private static getMesh(geometry: any, material: any): any {
+    private static getMesh(geometry: any, material: any): Mesh {
         const mesh: any = new Mesh(geometry, material);
         mesh.position.set(0, 0, 0);
         mesh.rotation.set(0, 0, 0);
@@ -113,17 +203,14 @@ export class Kadmos {
         controls.update();
     }
 
-    private static onWindowResize(): void {
-        this.camera.aspect = window.innerWidth / window.innerHeight;
-        this.camera.updateProjectionMatrix();
-
-        this.renderer.setSize(window.innerWidth, window.innerHeight);
-
-        this.render();
-    }
-
     private static render(): void {
         this.renderer.render(this.scene, this.camera);
+        setTimeout(() => {
+            this.getSpinner().classList.add("kadmos-spinner--hidden");
+            setTimeout(() => {
+                this.getStlWrapper().classList.add("stlBackdrop--visible");
+            }, 250);
+        }, 100);
     }
 
     private static hideBackdrop(): void {
@@ -148,7 +235,7 @@ export class Kadmos {
             const filePath: string = event.target.dataset.file;
             const color: string = event.target.dataset.color;
 
-            parent.handleModel(filePath, Number(color), 800, 600);
+            parent.handleModel(filePath, color, 800, 600);
 
             backdrop.classList.add("backdrop--fade-in");
         });

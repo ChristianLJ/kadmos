@@ -1,14 +1,12 @@
 {
   "name": "kadmos",
-  "version": "1.0.25",
+  "version": "1.0.26",
   "author": "Christian Leicht",
   "license": "ISC",
   "scripts": {
-    "build": "tsc --build tsconfig.json",
-    "deploy": "npm run build && npm publish"
-  },
-  "dependencies": {
-    "three-full": "^17.1.0"
+    "build:production": "tsc --build tsconfig.json",
+    "run:development": "parcel ./examples/index.html --out-dir ./examples/dist",
+    "deploy": "npm run build:production && npm publish"
   },
   "files": [
     "/src",
@@ -28,7 +26,12 @@
     "url": "https://github.com/ChristianLJ/STLViewer/issues"
   },
   "homepage": "https://github.com/ChristianLJ/STLViewer#readme",
+  "dependencies": {
+    "three-full": "^17.1.0"
+  },
   "devDependencies": {
+    "parcel": "^1.12.3",
+    "sass": "^1.20.1",
     "typescript": "^3.4.5"
   },
   "description": ""

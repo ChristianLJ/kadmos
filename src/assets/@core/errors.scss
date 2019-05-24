@@ -1,0 +1,34 @@
+#kadmos-error-wrapper {
+  position: fixed;
+  left: 0;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  background: #f9f9f9;
+  visibility: hidden;
+  opacity: 0;
+  transition: all 0.250s linear;
+  display: flex;
+  flex-direction: column;
+  flex-wrap: nowrap;
+  justify-content: center;
+  align-items: center;
+  align-content: stretch;
+
+  &.kadmos-error-wrapper--visible {
+    visibility: visible;
+    opacity: 1;
+    transition: all 0.250s linear;
+  }
+
+  #kadmos-error {
+    padding: 20px;
+    text-align: center;
+    background: #C62828;
+    color: #fff;
+    font-size: 24px;
+    margin: 20px;
+    border-radius: 8px;
+    font-family: Verdana, sans-serif;
+  }
+}
