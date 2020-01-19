@@ -6,7 +6,7 @@ A simple zero configuration Javascript library made with [Three.js](hhttps://thr
 
 For the full experience, I recommend following the demo application.
 
-![Kadmos in use](/images/logo.png)
+![Kadmos in use](https://github.com/leicht-io/kadmos/blob/master/examples/graphics/image.PNG?raw=true)
 
 ### Installing
 
