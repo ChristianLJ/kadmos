@@ -89,8 +89,9 @@ export declare class OrbitControls extends EventDispatcher {
     dispose(): void;
     reset(): void;
     saveState(): void;
-    readonly center: Vector3;
-    noZoom: boolean;
+    get center(): Vector3;
+    get noZoom(): boolean;
+    set noZoom(value: boolean);
     private _checkPerspectiveCamera;
     private _checkOrthographicCamera;
 }

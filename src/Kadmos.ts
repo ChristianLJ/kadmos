@@ -136,7 +136,7 @@ export class Kadmos {
     public static handleModel(filePath: string, color: string, width: number, height: number): void {
         this.initScene();
         this.initCamera(width, height);
-
+console.log(1)
         this.scene.add(this.camera);
 
         const grid: any = new GridHelper(10, 50, 0x96CBDE, 0xA6DBEF);
