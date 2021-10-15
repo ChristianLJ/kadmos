@@ -1,16 +1,17 @@
-import {GridHelper} from "three-full/sources/helpers/GridHelper";
-import {Vector3} from "three-full/sources/math/Vector3";
-import {WebGLRenderer} from "three-full/sources/renderers/WebGLRenderer";
-import {MeshPhongMaterial} from "three-full/sources/materials/MeshPhongMaterial";
-import {Mesh} from "three-full/sources/objects/Mesh";
-import {PointLight} from "three-full/sources/lights/PointLight";
-import {Scene} from "three-full/sources/scenes/Scene";
-import {PerspectiveCamera} from "three-full/sources/cameras/PerspectiveCamera";
-import {AmbientLight} from "three-full/sources/lights/AmbientLight";
-import {STLLoader} from "./loaders/STLLoader";
-import {OrbitControls} from "./loaders/OrbitControls";
 import './assets/styles.scss';
-import {Geometry} from "three-full/sources/core/Geometry";
+import {Geometry} from "three/examples/jsm/deprecated/Geometry";
+import {
+    AmbientLight,
+    GridHelper, Mesh,
+    MeshPhongMaterial,
+    PerspectiveCamera,
+    PointLight,
+    Scene,
+    Vector3,
+    WebGLRenderer
+} from "three";
+import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+import {STLLoader} from "three/examples/jsm/loaders/STLLoader";
 
 export class Kadmos {
     private static camera: any;
@@ -136,10 +137,9 @@ export class Kadmos {
     public static handleModel(filePath: string, color: string, width: number, height: number): void {
         this.initScene();
         this.initCamera(width, height);
-console.log(1)
         this.scene.add(this.camera);
 
-        const grid: any = new GridHelper(10, 50, 0x96CBDE, 0xA6DBEF);
+        const grid: any = new GridHelper(10, 50, 0x8d8d8d, 0xbdbdbd);
         grid.rotateOnAxis(new Vector3(1, 0, 0), 90 * (Math.PI / 180));
         this.scene.add(grid);
 
@@ -155,7 +155,6 @@ console.log(1)
 
         const loader: any = new STLLoader();
 
-        // Binary files
         const material: any = new MeshPhongMaterial({color: Number(color), specular: 0x0, shininess: 50});
         loader.load(filePath, (geometry: any) => {
             this.handleCenter(geometry);
@@ -241,7 +240,7 @@ console.log(1)
         });
 
         document.addEventListener("keyup", (event) => {
-            if (event.keyCode === 27) { // escape key maps to keycode `27`
+            if (event.key === "Escape") { // escape key maps to keycode `27`
                 this.hideBackdrop();
             }
         });
