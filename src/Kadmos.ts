@@ -2,7 +2,8 @@ import './assets/styles.scss';
 import {Geometry} from "three/examples/jsm/deprecated/Geometry";
 import {
     AmbientLight,
-    GridHelper, Mesh,
+    GridHelper,
+    Mesh,
     MeshPhongMaterial,
     PerspectiveCamera,
     PointLight,
@@ -20,7 +21,6 @@ export class Kadmos {
     private static selector: string;
 
     constructor() {
-
     }
 
     private static getSpinner(): Element {
