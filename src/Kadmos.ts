@@ -1,8 +1,7 @@
 import './assets/styles.scss';
 import {Geometry} from "three/examples/jsm/deprecated/Geometry";
 import {
-    AmbientLight,
-    GridHelper,
+    GridHelper, HemisphereLight,
     Mesh,
     MeshPhongMaterial,
     PerspectiveCamera,
@@ -80,11 +79,11 @@ export class Kadmos {
             const urlParams = new URLSearchParams(window.location.search);
 
             const fileUrl: string | null = urlParams.get('fileUrl');
-            const color: string | null = urlParams.get('color');
+            const color: string | null = urlParams.get('color') || "0x626262";
             if (!fileUrl || !color) {
                 this.getSpinner().classList.add("kadmos-spinner--hidden");
                 this.getErrorWrapper().classList.add("kadmos-error-wrapper--visible");
-                this.getError().innerHTML = "<p>Please specify both fileUrl and color in HEX format.</p>";
+                this.getError().innerHTML = "<p>Please specify fileUrl.</p>";
 
                 return;
             }
@@ -139,7 +138,7 @@ export class Kadmos {
         this.initCamera(width, height);
         this.scene.add(this.camera);
 
-        const grid: any = new GridHelper(10, 50, 0x8d8d8d, 0xbdbdbd);
+        const grid: any = new GridHelper(20, 50, 0x8d8d8d, 0xbdbdbd);
         grid.rotateOnAxis(new Vector3(1, 0, 0), 90 * (Math.PI / 180));
         this.scene.add(grid);
 
@@ -155,7 +154,7 @@ export class Kadmos {
 
         const loader: any = new STLLoader();
 
-        const material: any = new MeshPhongMaterial({color: Number(color), specular: 0x0, shininess: 50});
+        const material: any = new MeshPhongMaterial({color: Number(color), specular: 0x0, shininess: 0});
         loader.load(filePath, (geometry: any) => {
             this.handleCenter(geometry);
             this.scene.add(this.getMesh(geometry, material));
@@ -185,12 +184,12 @@ export class Kadmos {
         this.camera.up.set(0, 0, 1);
         this.camera.position.set(0, -9, 6);
 
-        this.camera.add(new PointLight(0xffffff, 0.8));
+         this.camera.add(new PointLight(0xffffff, 0.8));
     }
 
     private static initScene(): void {
         this.scene = new Scene();
-        this.scene.add(new AmbientLight(0x999999));
+        this.scene.add(new HemisphereLight( 0xffffff, 0x000000, 1 ));
     }
 
     private static initControls(): void {

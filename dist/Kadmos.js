@@ -1,5 +1,5 @@
 import './assets/styles.scss';
-import { AmbientLight, GridHelper, Mesh, MeshPhongMaterial, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from "three";
+import { GridHelper, HemisphereLight, Mesh, MeshPhongMaterial, PerspectiveCamera, PointLight, Scene, Vector3, WebGLRenderer } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { STLLoader } from "three/examples/jsm/loaders/STLLoader";
 export class Kadmos {
@@ -58,11 +58,11 @@ export class Kadmos {
             model.innerHTML = "";
             const urlParams = new URLSearchParams(window.location.search);
             const fileUrl = urlParams.get('fileUrl');
-            const color = urlParams.get('color');
+            const color = urlParams.get('color') || "0x626262";
             if (!fileUrl || !color) {
                 this.getSpinner().classList.add("kadmos-spinner--hidden");
                 this.getErrorWrapper().classList.add("kadmos-error-wrapper--visible");
-                this.getError().innerHTML = "<p>Please specify both fileUrl and color in HEX format.</p>";
+                this.getError().innerHTML = "<p>Please specify fileUrl.</p>";
                 return;
             }
             this.handleModel(fileUrl, color, window.innerWidth, window.innerHeight);
@@ -105,7 +105,7 @@ export class Kadmos {
         this.initScene();
         this.initCamera(width, height);
         this.scene.add(this.camera);
-        const grid = new GridHelper(10, 50, 0x8d8d8d, 0xbdbdbd);
+        const grid = new GridHelper(20, 50, 0x8d8d8d, 0xbdbdbd);
         grid.rotateOnAxis(new Vector3(1, 0, 0), 90 * (Math.PI / 180));
         this.scene.add(grid);
         this.renderer = new WebGLRenderer({ antialias: true });
@@ -117,7 +117,7 @@ export class Kadmos {
             stlModelElement.appendChild(this.renderer.domElement);
         }
         const loader = new STLLoader();
-        const material = new MeshPhongMaterial({ color: Number(color), specular: 0x0, shininess: 50 });
+        const material = new MeshPhongMaterial({ color: Number(color), specular: 0x0, shininess: 0 });
         loader.load(filePath, (geometry) => {
             this.handleCenter(geometry);
             this.scene.add(this.getMesh(geometry, material));
@@ -142,7 +142,7 @@ export class Kadmos {
     }
     static initScene() {
         this.scene = new Scene();
-        this.scene.add(new AmbientLight(0x999999));
+        this.scene.add(new HemisphereLight(0xffffff, 0x000000, 1));
     }
     static initControls() {
         const controls = new OrbitControls(this.camera, this.renderer.domElement);
