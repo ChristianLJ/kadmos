@@ -1,10 +1,17 @@
 import './assets/styles.scss';
-import {Geometry} from "three/examples/jsm/deprecated/Geometry";
 import {
-    GridHelper, HemisphereLight,
+    ACESFilmicToneMapping,
+    AmbientLight,
+    Color,
+    DirectionalLight,
+    Fog,
+    GridHelper,
+    HemisphereLight,
     Mesh,
     MeshPhongMaterial,
+    PCFSoftShadowMap,
     PerspectiveCamera,
+    PMREMGenerator,
     PointLight,
     Scene,
     Vector3,
@@ -79,11 +86,14 @@ export class Kadmos {
             const urlParams = new URLSearchParams(window.location.search);
 
             const fileUrl: string | null = urlParams.get('fileUrl');
-            const color: string | null = urlParams.get('color') || "0x626262";
+            let color: string | null = urlParams.get('color') || "0x626262";
+            if (color === "0x000" || color === "0x000000") {
+                color = "0x444444"
+            }
             if (!fileUrl || !color) {
                 this.getSpinner().classList.add("kadmos-spinner--hidden");
                 this.getErrorWrapper().classList.add("kadmos-error-wrapper--visible");
-                this.getError().innerHTML = "<p>Please specify fileUrl.</p>";
+                this.getError().innerHTML = "<p>The fileUrl parameter is missing</p>";
 
                 return;
             }
@@ -120,7 +130,7 @@ export class Kadmos {
         this.getContentWrapper().appendChild(backdropNode);
     }
 
-    private static handleCenter(geometry: Geometry): void {
+    private static handleCenter(geometry): void {
         geometry.computeBoundingBox();
 
         geometry.center();
@@ -146,6 +156,12 @@ export class Kadmos {
         this.renderer.setClearColor(0xFAFAFA);
         this.renderer.setPixelRatio(window.devicePixelRatio);
         this.renderer.setSize(width, height);
+        this.renderer.toneMapping = ACESFilmicToneMapping;
+        this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = PCFSoftShadowMap;
+
+        const pmremGenerator = new PMREMGenerator(this.renderer);
+        pmremGenerator.compileEquirectangularShader();
 
         const stlModelElement = document.getElementById("stlModel");
         if (stlModelElement) {
@@ -154,7 +170,7 @@ export class Kadmos {
 
         const loader: any = new STLLoader();
 
-        const material: any = new MeshPhongMaterial({color: Number(color), specular: 0x0, shininess: 0});
+        const material: any = new MeshPhongMaterial({color: Number(color), specular: 0x0, shininess: 10});
         loader.load(filePath, (geometry: any) => {
             this.handleCenter(geometry);
             this.scene.add(this.getMesh(geometry, material));
@@ -184,12 +200,29 @@ export class Kadmos {
         this.camera.up.set(0, 0, 1);
         this.camera.position.set(0, -9, 6);
 
-         this.camera.add(new PointLight(0xffffff, 0.8));
+        this.camera.add(new PointLight(0xffffff, 0.8));
     }
 
     private static initScene(): void {
         this.scene = new Scene();
-        this.scene.add(new HemisphereLight( 0xffffff, 0x000000, 1 ));
+        this.scene.background = new Color(0xffffff);
+        this.scene.fog = new Fog(0xa0a0a0, 10, 50);
+
+        this.scene.add(new HemisphereLight(0xffffff, 0x000000, 1));
+        this.scene.add(new AmbientLight(0xffffff));
+
+        const directionalLight = new DirectionalLight(0xffffff, 1);
+        directionalLight.castShadow = true;
+        directionalLight.shadow.camera.top = 44;
+        directionalLight.shadow.camera.bottom = -14;
+        directionalLight.shadow.camera.left = -14;
+        directionalLight.shadow.camera.right = 14;
+        directionalLight.shadow.camera.near = 0.1;
+        directionalLight.shadow.camera.far = 40;
+        directionalLight.shadow.camera.far = 40;
+        directionalLight.shadow.bias = -0.002;
+        directionalLight.position.set(0, 20, 20);
+        this.scene.add(directionalLight);
     }
 
     private static initControls(): void {
